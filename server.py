@@ -18,14 +18,18 @@ def connection_func(con, addr):
                 message = data[3:] + b'is connected'
             else: 
                 message = 'server got data'    
-            con.sendall(data)
+            for c in all_conn:
+                c.sendall(data)
         else:
             print('no data from', addr)
             break
+    username_dc.pop(addr)
+    all_conn.remove(con)
     con.close()
 
 # global variables 
 username_dc = dict()
+all_conn = set()
 
 # Create a TCP/IP socket
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -47,6 +51,7 @@ while True:
     connection, client_address = sock.accept()
   
     print('connection from', client_address)
+    all_conn.add(connection)
     start_new_thread(connection_func, (connection, client_address, ))
     # connection_func(connection, client_address)
     # Clean up the connection

@@ -24,6 +24,9 @@ try:
         sys.exit(1)
     while True :
         message = (input(username + '>').strip()).encode('utf-8')
+        print(message)
+        if message == b'exit':
+            break
 
         # Send data
         print('sending {!r}'.format(message))
